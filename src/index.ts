@@ -1,12 +1,25 @@
 import 'dotenv/config';
 import Fastify from 'fastify';
+import autoLoad from '@fastify/autoload';
+import { join } from 'path';
+import { loggerConfig } from './configs/logger';
 import { name } from '../package.json';
 
 const APP_PORT = process.env.APP_PORT;
 const APP_HOST = process.env.APP_HOST;
 
 const fastify = Fastify({
-  logger: true
+  logger: loggerConfig['development']
+});
+
+fastify.register(autoLoad, {
+  dir: join(__dirname, 'plugins'),
+  dirNameRoutePrefix: false
+});
+
+fastify.register(autoLoad, {
+  dir: join(__dirname, 'routes'),
+  options: { prefix: '/api/v1' }
 });
 
 fastify.setErrorHandler((error, request, reply) => {
@@ -15,7 +28,7 @@ fastify.setErrorHandler((error, request, reply) => {
 });
 
 fastify.get('/', (request, reply) => {
-  reply.status(200).send({ message: `Welcome to ${ name } API` });
+  reply.status(200).send({ message: `Welcome to ${name} API` });
 });
 
 async function start() {

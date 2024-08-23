@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    container_name: ktrek-backed-course-app
+    container_name: ktrek-backed-test-app
     restart: always
     env_file: .env
     build:
@@ -20,7 +20,7 @@ services:
       - redis
 
   redis:
-    container_name: ktrek-backed-course-redis
+    container_name: ktrek-backed-test-redis
     restart: always
     env_file: .env
     image: 'redis:7.2.1-alpine'
